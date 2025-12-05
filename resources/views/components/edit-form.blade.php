@@ -1,6 +1,7 @@
-<form action="{{ route('product.update')}}" method="post" enctype="multipart/form-data">
+@props(['product'])
+<form action="{{ route('product.update',$product->id)}}" method="post" enctype="multipart/form-data">
     @csrf
-
+    @method('PUT')
     <div class="container mt-4">
         <div class="card shadow-sm">
             <div class="card-header bg-primary text-white">

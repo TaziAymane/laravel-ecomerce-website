@@ -1,5 +1,5 @@
 @extends('base')
 @section('title','Edit')
 @section('content')
-   <x-edit-form></x-editForm>
+   <x-edit-form :product="$product"></x-editForm>
 @endsection

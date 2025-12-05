@@ -58,9 +58,8 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
-        $id = $request->idate;
         $product = Product::findOrFail($id);
         return view('product.edit', compact('product'));
     }
@@ -68,17 +67,32 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
-    {
-        $productUpdated = Product::find($id);
-        $validData = $request->validate();
-        // Handle image upload
-        if ($request->hasFile('image')) {
-            $formFields['image'] = $request->file('image')->store('products', 'public');
-        }
-        $productUpdated->update($validData) ;
-        return to_route('product.index')->with('success', 'Product created successfully!');
+public function update(Request $request, $id)
+{
+    $product = Product::findOrFail($id);
+
+    // Validate
+    $validData = $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'quantity' => 'required|integer|min:0',
+        'price' => 'required|numeric|min:0',
+        'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+    ]);
+
+    // Image upload
+    if ($request->hasFile('image')) {
+        $validData['image'] = $request->file('image')->store('products', 'public');
     }
+
+    // Update product
+    $product->update($validData);
+
+    return redirect()
+        ->route('product.index')
+        ->with('success', 'Product updated successfully!');
+}
+
 
     /**
      * Remove the specified resource from storage.

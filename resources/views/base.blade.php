@@ -12,6 +12,7 @@
 
 <body>
     <div class="container">
+        <x-success-alert/>
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul class="mb-0">
